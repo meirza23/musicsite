@@ -1,0 +1,5 @@
+Flask==2.0.3
+pymongo==4.2.0
+ytmusicapi==0.24.0
+werkzeug==2.0.3
+python-dotenv==0.19.0

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} - MEI MUSIC</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #FFD700;
+            --background: #0f0f0f;
+            --surface: #181818;
+        }
+
+        body {
+            margin: 0;
+            background: var(--background);
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            font-family: 'Arial', sans-serif;
+            position: relative;
+        }
+
+        .playlist-controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .add-to-playlist {
+            background: none;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: transform 0.3s;
+            padding: 8px;
+        }
+
+        .add-to-playlist:hover {
+            transform: scale(1.1);
+        }
+
+        .playlist-dropdown {
+            background: var(--surface);
+            border-radius: 8px;
+            padding: 1rem;
+            width: 250px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            display: none;
+            margin-top: 10px;
+        }
+
+        .playlist-item {
+            padding: 0.5rem;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .playlist-item:hover {
+            background: #2a2a2a;
+        }
+
+        .player-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            text-align: center;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .thumbnail {
+            width: 300px;
+            height: 300px;
+            border-radius: 15px;
+            object-fit: cover;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            margin: 0 auto 2rem;
+        }
+
+        .song-title {
+            font-size: 1.8rem;
+            margin: 0.5rem 0;
+            color: var(--primary);
+        }
+
+        .song-artist {
+            color: #aaa;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 4px;
+            background: #333;
+            border-radius: 2px;
+            margin: 1.5rem 0;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--primary);
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: #888;
+            margin-bottom: 2rem;
+        }
+
+        .controls-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .play-btn-container {
+            position: relative;
+            width: 100%;
+            height: 70px;
+        }
+
+        .play-btn {
+            background: var(--primary);
+            border: none;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(255, 215, 0, 0.2);
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .play-btn:hover {
+            transform: translateX(-50%) scale(1.05);
+            box-shadow: 0 6px 16px rgba(255, 215, 0, 0.3);
+        }
+
+        .play-btn i {
+            color: #000;
+            font-size: 1.8rem;
+            margin-left: 4px;
+        }
+
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            width: 150px;
+            margin-top: 1rem;
+        }
+
+        .volume-slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 4px;
+            background: #333;
+            border-radius: 2px;
+            outline: none;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 14px;
+            height: 14px;
+            background: var(--primary);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .player-container {
+                padding: 1rem;
+            }
+            
+            .thumbnail {
+                width: 200px;
+                height: 200px;
+            }
+
+            .playlist-controls {
+                top: 10px;
+                right: 10px;
+            }
+
+            .playlist-dropdown {
+                width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Playlist Kontrolleri -->
+    <div class="playlist-controls">
+        <button class="add-to-playlist" id="addToPlaylist">
+            <i class="fas fa-plus-circle"></i>
+        </button>
+        <div class="playlist-dropdown" id="playlistDropdown">
+            <!-- Playlistler dinamik olarak yüklenecek -->
+        </div>
+    </div>
+
+    <!-- Müzik Player -->
+    <div class="player-container">
+        <img class="thumbnail" src="{{ thumbnail }}" alt="Album Art">
+        <h1 class="song-title">{{ title }}</h1>
+        <p class="song-artist">{{ artist }}</p>
+
+        <div class="progress-container" id="progressContainer">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <div class="time-display">
+            <span id="currentTime">0:00</span>
+            <span id="duration">0:00</span>
+        </div>
+
+        <div class="controls-wrapper">
+            <div class="play-btn-container">
+                <button class="play-btn" id="playButton">
+                    <i class="fas fa-play"></i>
+                </button>
+            </div>
+            
+            <div class="volume-control">
+                <i class="fas fa-volume-up"></i>
+                <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.1" value="1">
+            </div>
+        </div>
+    </div>
+
+    <audio id="audioPlayer">
+        <source src="/stream/{{ video_id }}" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const audioPlayer = document.getElementById('audioPlayer');
+        const playButton = document.getElementById('playButton');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const addToPlaylistBtn = document.getElementById('addToPlaylist');
+        const playlistDropdown = document.getElementById('playlistDropdown');
+
+        // Oynatma Kontrolü
+        playButton.addEventListener('click', () => {
+            if (audioPlayer.paused) {
+                audioPlayer.play();
+                playButton.innerHTML = '<i class="fas fa-pause"></i>';
+            } else {
+                audioPlayer.pause();
+                playButton.innerHTML = '<i class="fas fa-play"></i>';
+            }
+        });
+
+        // Ses Kontrolü
+        volumeSlider.addEventListener('input', (e) => {
+            audioPlayer.volume = e.target.value;
+        });
+
+        // Progress Bar Güncelleme
+        audioPlayer.addEventListener('timeupdate', () => {
+            const progress = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+            document.getElementById('currentTime').textContent = 
+                `${Math.floor(audioPlayer.currentTime / 60)}:${Math.floor(audioPlayer.currentTime % 60).toString().padStart(2, '0')}`;
+        });
+
+        // Süre Bilgisi
+        audioPlayer.addEventListener('loadedmetadata', () => {
+            document.getElementById('duration').textContent = 
+                `${Math.floor(audioPlayer.duration / 60)}:${Math.floor(audioPlayer.duration % 60).toString().padStart(2, '0')}`;
+        });
+
+        // Progress Bar Tıklama
+        document.getElementById('progressContainer').addEventListener('click', (e) => {
+            const rect = e.target.getBoundingClientRect();
+            const clickPosition = (e.clientX - rect.left) / rect.width;
+            audioPlayer.currentTime = audioPlayer.duration * clickPosition;
+        });
+
+        // Playlist Kontrolleri
+        addToPlaylistBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            playlistDropdown.style.display = playlistDropdown.style.display === 'block' ? 'none' : 'block';
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!addToPlaylistBtn.contains(e.target) && !playlistDropdown.contains(e.target)) {
+                playlistDropdown.style.display = 'none';
+            }
+        });
+
+        // Playlist Yükleme
+        function loadPlaylists() {
+            fetch('/api/get_user_playlists')
+                .then(response => response.json())
+                .then(playlists => {
+                    playlistDropdown.innerHTML = playlists.map(playlist => `
+                        <div class="playlist-item" data-id="${playlist._id}">
+                            ${playlist.name}
+                        </div>
+                    `).join('');
+                });
+        }
+
+        // Playlist'e Ekleme
+        playlistDropdown.addEventListener('click', (e) => {
+            if (e.target.classList.contains('playlist-item')) {
+                const playlistId = e.target.dataset.id;
+                const videoId = '{{ video_id }}';
+                
+                fetch('/api/add_to_playlist', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        playlistId: playlistId,
+                        videoId: videoId
+                    })
+                }).then(response => {
+                    if (response.ok) {
+                        alert('Şarkı playliste eklendi!');
+                        playlistDropdown.style.display = 'none';
+                    }
+                });
+            }
+        });
+
+        // Sayfa Yüklendiğinde
+        window.addEventListener('DOMContentLoaded', loadPlaylists);
+    </script>
+</body>
+</html>

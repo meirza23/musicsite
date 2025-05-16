@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Paneli</title>
+    <link rel="stylesheet" href="../static/css/admin.css">
+</head>
+<body>
+    <div class="admin-container">
+       <!-- Header'a Çıkış Butonu Ekle -->
+<header class="admin-header">
+    <h1 class="admin-title">Kullanıcı Yönetim Paneli</h1>
+    <button class="btn btn-logout" onclick="window.location.href='/logout'">Çıkış Yap</button>
+</header>
+        
+        <div class="table-wrapper">
+            <table class="user-table">
+                <thead>
+                    <tr>
+                        <th>Ad</th>
+                        <th>Soyad</th>
+                        <th>E-posta</th>
+                        <th>İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.name }}</td>
+                        <td>{{ user.surname }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>
+                            <button class="btn btn-edit" onclick="editUser('{{ user._id }}')">Düzenle</button>
+                            <button class="btn btn-delete" onclick="deleteUser('{{ user._id }}')">Sil</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Düzenleme Modalı -->
+        <div id="editModal" class="modal">
+            <div class="modal-content">
+                <h2>Kullanıcı Düzenle</h2>
+                <form id="editForm" onsubmit="updateUser(event)">
+                    <input type="hidden" id="editUserId">
+                    <div class="input-group">
+                        <label>Ad:</label>
+                        <input type="text" id="editName" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Soyad:</label>
+                        <input type="text" id="editSurname" required>
+                    </div>
+                    <div class="input-group">
+                        <label>E-posta:</label>
+                        <input type="email" id="editEmail" required>
+                    </div>
+                    <div class="form-buttons">
+                        <button type="button" class="btn btn-cancel" onclick="closeEditModal()">İptal</button>
+                        <button type="submit" class="btn btn-edit">Kaydet</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Düzenleme Fonksiyonu
+        function editUser(userId) {
+            fetch(`/admin/get/${userId}`)
+                .then(response => {
+                    if (!response.ok) throw new Error(`HTTP Hatası: ${response.status}`);
+                    return response.json();
+                })
+                .then(user => {
+                    document.getElementById('editUserId').value = userId;
+                    document.getElementById('editName').value = user.name;
+                    document.getElementById('editSurname').value = user.surname;
+                    document.getElementById('editEmail').value = user.email;
+                    document.getElementById('editModal').style.display = 'block';
+                })
+                .catch(error => {
+                    console.error('Hata:', error);
+                    alert(`Hata: ${error.message}`);
+                });
+        }
+
+        // Güncelleme Fonksiyonu
+        async function updateUser(e) {
+            e.preventDefault();
+            const userId = document.getElementById('editUserId').value;
+            const formData = {
+                name: document.getElementById('editName').value,
+                surname: document.getElementById('editSurname').value,
+                email: document.getElementById('editEmail').value
+            };
+
+            try {
+                const response = await fetch(`/admin/update/${userId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                if (!response.ok) throw new Error('Güncelleme başarısız');
+                closeEditModal();
+                location.reload();
+            } catch (error) {
+                console.error('Hata:', error);
+                alert(error.message);
+            }
+        }
+
+        // Modal'ı Kapat
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+
+        // Silme Fonksiyonu
+        function deleteUser(userId) {
+            if (confirm('Kullanıcıyı silmek istediğinize emin misiniz?')) {
+                fetch(`/admin/delete/${userId}`, { method: 'DELETE' })
+                    .then(() => location.reload());
+            }
+        }
+    </script>
+</body>
+</html>

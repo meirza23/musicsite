@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kitaplığım - Mei Music</title>
+    <link rel="stylesheet" href="../static/css/library.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header class="header">
+        <h1 class="logo-text">MEI MUSİC</h1>
+        <div class="profile-section">
+            <div class="profile-icon">
+        <img src="../static/images/user.png" alt="Profil">
+    </div>
+            <div class="profile-menu">
+                <div class="menu-item" onclick="window.location.href='/'">Ana Sayfa</div>
+                <div class="menu-item" onclick="window.location.href='/logout'">Çıkış Yap</div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="sidebar">
+        <ul class="sidebar-menu">
+            <li onclick="window.location.href='/'">Ana Sayfa</li>
+            <li class="active">Kitaplık</li>
+            <hr style="margin: 1rem 0; border-color: #666;">
+            <li class="new-playlist" onclick="createNewPlaylist()">
+                <i class="fas fa-plus-circle"></i>
+                Yeni Oynatma Listesi
+            </li>
+            <li>Beğendiğim Müzikler</li>
+        </ul>
+    </nav>
+
+    <div class="main-content">
+        <div class="music-grid">
+            {% for playlist in playlists %}
+            <div class="playlist-card" onclick="window.location.href='/playlist/{{ playlist._id }}'">
+                <div class="playlist-art">
+                    <div class="play-overlay">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <img src="{{ playlist.cover_url or '../static/images/playlist.png' }}">
+                </div>
+                <div class="playlist-details">
+                    <h4>{{ playlist.name }}</h4>
+                    <p>{{ playlist.songs|length }} şarkı</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script src="../static/js/library.js"></script>
+    <script>
+        document.querySelector('.profile-icon').addEventListener('click', function(e) {
+            e.stopPropagation();
+            document.querySelector('.profile-menu').classList.toggle('show');
+        });
+
+        window.addEventListener('click', function() {
+            document.querySelector('.profile-menu').classList.remove('show');
+        });
+
+        function createNewPlaylist() {
+            const name = prompt('Playlist adını girin:');
+            if (name) {
+                fetch('/api/create_playlist', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name: name })
+                }).then(response => response.json())
+                  .then(data => window.location.reload());
+            }
+        }
+    </script>
+</body>
+</html>

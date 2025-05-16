@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MEI MUSIC - Giriş Yap</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../static/css/login.css">
+</head>
+<body>
+    <div class="modal-overlay">
+        <div class="auth-modal">
+            <h2>MEI MUSIC'e Hoş Geldiniz</h2>
+            
+            <form class="auth-form" method="POST" action="/login">
+                <div class="input-group">
+                    <label>E-posta</label>
+                    <input type="email" name="email" placeholder="ornek@eposta.com" required>
+                </div>
+                <div class="input-group">
+                    <label>Şifre</label>
+                    <input type="password" name="password" placeholder="••••••••" required>
+                </div>
+                {% if error %}
+                <div class="error-message active">{{ error }}</div>
+                {% endif %}
+                <button type="submit" class="auth-btn">Giriş Yap</button>
+            </form>
+
+            <p class="switch-text">Hesabınız yok mu? <a href="/register">Kayıt Ol</a></p>
+        </div>
+    </div>
+
+    <script src="../static/js/login.js"></script>
+    <script src="../static/js/app.js"></script>
+</body>
+</html>

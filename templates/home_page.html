@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MEI MUSIC</title>
+    <link rel="stylesheet" href="../static/css/home_page.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header class="header">
+        <div class="menu-icon">☰</div>
+        <h1 class="logo-text">MEI MUSİC</h1>
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-bar" id="searchInput" placeholder="Şarkı, sanatçı veya albüm ara">
+            <div class="search-results" id="searchResults"></div>
+        </div>
+        <!-- ... Diğer kısımlar aynı ... -->
+<div class="profile-section">
+    <div class="profile-icon">
+        <img src="../static/images/user.png" alt="Profil">
+    </div>
+    <div class="profile-menu">
+        <div class="menu-item" onclick="window.location.href='/logout'">Çıkış Yap</div>
+    </div>
+</div>
+<!-- ... Diğer kısımlar aynı ... -->
+    </header>
+
+    <nav class="sidebar">
+    <ul class="sidebar-menu">
+        <li onclick="window.location.href='/library'">Kitaplık</li>
+        <hr style="margin: 1rem 0; border-color: #666;">
+        <li class="new-playlist" onclick="createNewPlaylist()">
+            <i class="fas fa-plus-circle"></i>
+            Yeni Oynatma Listesi
+        </li>
+        <!-- Playlist'leri listele -->
+        {% for playlist in playlists %}
+        <li onclick="window.location.href='/playlist/{{ playlist._id }}'">{{ playlist.name }}</li>
+        {% endfor %}
+    </ul>
+</nav>
+
+    <div class="main-content">
+        <h2 class="section-title">Popüler Şarkılar</h2>
+        <div class="music-grid">
+            {% for song in songs %}
+            <div class="music-card">
+                <div class="album-art">
+                    <img src="{{ song.thumbnail }}">
+                    <div class="play-overlay" onclick="window.location.href='/player/{{ song.videoId }}'">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
+                <h4>{{ song.title }}</h4>
+                <p>{{ song.artist }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script src="../static/js/app.js"></script>
+    <script>
+        function createNewPlaylist() {
+            const name = prompt('Playlist adını girin:');
+            if (name) {
+                fetch('/api/create_playlist', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name: name })
+                }).then(response => response.json())
+                  .then(data => window.location.reload());
+            }
+        }
+    </script>
+</body>
+</html>

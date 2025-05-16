@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MEI MUSIC - Kayıt Ol</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../static/css/register.css">
+</head>
+<body>
+    <div class="modal-overlay">
+        <div class="auth-modal">
+            <h2>MEI MUSIC'e Katılın</h2>
+            
+            <form class="auth-form" method="POST" action="/register">
+                <div class="input-group">
+                    <label>Ad</label>
+                    <input type="text" name="name" placeholder="Adınız" required>
+                </div>
+                <div class="input-group">
+                    <label>Soyad</label>
+                    <input type="text" name="surname" placeholder="Soyadınız" required>
+                </div>
+                <div class="input-group">
+                    <label>E-posta</label>
+                    <input type="email" name="email" placeholder="ornek@eposta.com" required>
+                </div>
+                <div class="input-group">
+                    <label>Şifre</label>
+                    <input type="password" name="password" placeholder="••••••••" required>
+                </div>
+                {% if error %}
+                <div class="error-message active">{{ error }}</div>
+                {% endif %}
+                <button type="submit" class="auth-btn">Hesap Oluştur</button>
+            </form>
+
+            <p class="switch-text">Zaten hesabınız var mı? <a href="/login">Giriş Yap</a></p>
+        </div>
+    </div>
+
+    <script src="../static/js/register.js"></script>
+    <script src="../static/js/app.js"></script>
+</body>
+</html>

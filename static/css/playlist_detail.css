@@ -1,0 +1,240 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background-color: #0f0f0f;
+    color: #fff;
+}
+
+/* Header */
+.header {
+    display: flex;
+    align-items: center;
+    padding: 1rem 2rem;
+    background: #181818;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+    border-bottom: 1px solid #333;
+}
+
+.logo-text {
+    color: #ffd700;
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-right: auto;
+}
+
+/* Playlist Header */
+.playlist-header {
+    padding: 6rem 2rem 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto 40px;
+    padding-left: 370px;
+}
+
+.playlist-cover {
+    width: 250px;
+    height: 250px;
+    border-radius: 12px;
+    object-fit: cover;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+}
+
+.playlist-info {
+    text-align: left;
+}
+
+.section-title {
+    font-size: 2.5rem;
+    color: #fff;
+    margin-bottom: 0.5rem;
+}
+
+.song-count {
+    color: #ffd700;
+    font-size: 1.1rem;
+}
+
+/* Boş Playlist Mesajı */
+.empty-state {
+    text-align: center;
+    color: #888;
+    font-size: 1.2rem;
+    margin-top: -20px;
+}
+
+/* Song List */
+.song-list {
+    margin-top: 20px;
+    padding: 0 2rem 2rem;
+}
+
+.song-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border-radius: 8px;
+    transition: background 0.3s;
+    gap: 1.5rem;
+    cursor: pointer;
+}
+
+.song-item:hover {
+    background: rgba(255,215,0,0.05);
+}
+
+.track-number {
+    width: 30px;
+    color: #888;
+    font-size: 0.95rem;
+}
+
+.album-art {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.album-art img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.song-details {
+    flex: 1;
+}
+
+.song-title {
+    font-size: 1rem;
+    margin-bottom: 0.3rem;
+}
+
+.song-artist {
+    color: #888;
+    font-size: 0.9rem;
+}
+
+/* Profile Section */
+.profile-section {
+    margin-left: auto;
+    position: relative;
+}
+
+.profile-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: 2px solid #ffd700;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.profile-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-icon:hover {
+    transform: scale(1.05);
+}
+
+.profile-menu {
+    position: absolute;
+    right: 0;
+    top: 60px;
+    background: #282828;
+    border-radius: 8px;
+    padding: 0.8rem;
+    width: 180px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    display: none;
+    z-index: 1001;
+}
+
+.profile-menu.show {
+    display: block;
+}
+
+.menu-item {
+    padding: 0.8rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: #fff;
+    font-size: 0.95rem;
+}
+
+.menu-item:hover {
+    background: #383838;
+}
+
+/* Oynatma Butonu */
+.play-button {
+    color: #FFD700;
+    font-size: 1.2rem;
+    padding: 0.8rem;
+    cursor: pointer;
+    transition: transform 0.2s, color 0.2s;
+    margin-left: auto;
+    opacity: 0.7;
+}
+
+.play-button:hover {
+    transform: scale(1.1);
+    opacity: 1;
+    color: #fff;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .header-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 20px;
+        padding-left: 0;
+    }
+
+    .playlist-cover {
+        width: 200px;
+        height: 200px;
+    }
+
+    .section-title {
+        font-size: 2rem;
+    }
+
+    .empty-state {
+        margin-top: 20px;
+    }
+
+    .song-item {
+        gap: 1rem;
+        padding: 0.8rem;
+    }
+
+    .play-button {
+        padding: 0.5rem;
+        font-size: 1rem;
+    }
+}

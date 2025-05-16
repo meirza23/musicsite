@@ -1,0 +1,124 @@
+/* register.css */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background: rgba(15, 15, 15, 0.95);
+    backdrop-filter: blur(10px);
+    min-height: 100vh;
+}
+
+.modal-overlay {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 2rem;
+}
+
+.auth-modal {
+    background: #181818;
+    padding: 2.5rem;
+    border-radius: 15px;
+    width: 100%;
+    max-width: 450px;
+    position: relative;
+    border: 1px solid #333;
+    box-shadow: 0 0 30px rgba(0,0,0,0.5);
+}
+
+.auth-modal h2 {
+    color: #ffd700;
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+}
+
+.auth-form .input-group {
+    margin-bottom: 1.5rem;
+}
+
+.auth-form label {
+    display: block;
+    color: #fff;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.auth-form input {
+    width: 100%;
+    padding: 0.8rem;
+    border-radius: 8px;
+    border: 1px solid #333;
+    background: #282828;
+    color: #fff;
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+.auth-form input:focus {
+    outline: 2px solid #ffd700;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+.auth-btn {
+    width: 100%;
+    padding: 1rem;
+    background: #ffd700;
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.3s;
+    margin-top: 1rem;
+}
+
+.auth-btn:hover {
+    transform: scale(1.02);
+}
+
+.switch-text {
+    text-align: center;
+    color: #aaa;
+    margin-top: 1.5rem;
+}
+
+.switch-text a {
+    color: #ffd700;
+    text-decoration: none;
+    transition: opacity 0.3s;
+}
+
+.switch-text a:hover {
+    opacity: 0.8;
+}
+
+.error-message {
+    color: #ff4444;
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    display: none;
+}
+
+.error-message.active {
+    display: block;
+}
+
+@media (max-width: 480px) {
+    .auth-modal {
+        padding: 1.5rem;
+    }
+    
+    .auth-modal h2 {
+        font-size: 1.6rem;
+    }
+    
+    .auth-form input {
+        padding: 0.7rem;
+    }
+}
